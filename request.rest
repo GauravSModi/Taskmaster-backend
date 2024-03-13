@@ -1,0 +1,36 @@
+POST http://localhost:8009/login
+Content-Type: application/json
+
+{
+    "username": "gmodi",
+    "password": "brisingr"
+}
+
+###
+
+POST http://localhost:8009/signup
+Content-Type: application/json
+
+{
+    "username": "test",
+    "email": "test@test.com",
+    "password": "brisingr"
+}
+
+###
+
+POST http://localhost:8009/todo
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Content-Type: application/json
+
+###
+
+POST http://localhost:8009/list
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Content-Type: application/json
+
+{
+    "list_id": 1
+}
+
+###
