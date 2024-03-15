@@ -22,10 +22,6 @@ app.use(express.json());
 // //     auth.validateUser(password, hash);    
 // // }
 
-app.get('/message', (req, res) => {
-    res.json({ message: "Gaurav's To-do App!" });
-});
-
 app.post('/login', async (req, res) => {
     const {username, password} = req.body;
 
@@ -79,8 +75,8 @@ app.post('/signup', async (req, res) => {
 });
 
 
-app.post('/todo', auth.authenticateToken, async (req, res) => {
-    console.log("/todo");
+app.post('/getLists', auth.authenticateToken, async (req, res) => {
+    console.log("/getLists");
     console.log("user_id: ", req.user_id);
 
     let [status, lists] = await todo.getLists(req.user_id);
@@ -107,13 +103,37 @@ app.post('/getList', auth.authenticateToken, async (req, res) => {
 
 // TODO: Finish these functions
 
-app.post('/saveChangesList', auth.authenticateToken, async (req, res) => {
+app.post('/updateTitle', auth.authenticateToken, async (req, res) => {
+    console.log('updateTitle');
+    const user_id = req.user_id;
+    const {list_id, title} = req.body;
+
+    let [status] = await todo.updateTitle(user_id, list_id, title);
+
+    res
+        .status(status)
+});
+
+app.post('/createList', auth.authenticateToken, async (req, res) => {
+    console.log('/createList');
+    const user_id = req.user_id;
+    const { title, tasks } = req.body;
+
+    let [status] = await todo.createList(user_id, title, tasks);
+
+    res
+        .status(status)
+        .json({ success: status,
+                list_id: list_id });
+});
+
+app.post('/updateList', auth.authenticateToken, async (req, res) => {
     console.log("/list");
-    // res.status(200).json({ success: 200 });
+    
     const user_id = req.user_id;
     const { task_id } = req.body;
 
-    let [status] = await todo.deleteTask(user_id, task_id);
+    let [status] = await todo.updateList(user_id, task_id);
 
     res
         .status(status)
@@ -124,11 +144,11 @@ app.delete('/deleteTask', auth.authenticateToken, async (req, res) => {
     const user_id = req.user_id;
     // const { task_id } = req.body;
 
-    let [status] = await todo.deleteTask(user_id, );
+    // let [status] = await todo.deleteTask(user_id, );
 
-    res
-        .status(status)
-        // .json({ success: status });
+    // res
+    //     .status(status)
+    //     .json({ success: status });
 })
 
 

@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8009/todo
+POST http://localhost:8009/getLists
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
 Content-Type: application/json
 
@@ -31,6 +31,28 @@ Content-Type: application/json
 
 {
     "list_id": 1
+}
+
+###
+
+POST http://localhost:8009/createList
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Content-Type: application/json
+
+{
+    "title": "Test List",
+    "tasks": ["Create a createList function", "Test the function", "???", "Profit"]
+}
+
+###
+
+POST http://localhost:8009/updateTitle
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Content-Type: application/json
+
+{
+    "list_id": 1,
+    "title": "My first List, again"
 }
 
 ###

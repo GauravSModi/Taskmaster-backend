@@ -119,12 +119,12 @@ function assignToken(user_id) {
 }
 
 function authenticateToken(req, res, next) {
-    console.log("AuthenticateToken()");
+    // console.log("AuthenticateToken()");
     const authHeader = req.headers['authorization'];
-    console.log("authHeader: " + authHeader);
+    // console.log("authHeader: " + authHeader);
     const token = authHeader && authHeader.split(' ')[1]; // This is essentially to make sure header != null
 
-    console.log("Token: " + token);
+    // console.log("Token: " + token);
     if (token  == null) {
         return res.sendStatus(401);
     }
