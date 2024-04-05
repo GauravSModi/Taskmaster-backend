@@ -129,8 +129,12 @@ function authenticateToken(req, res, next) {
         return res.sendStatus(401);
     }
 
+    console.log("Token: " + token);
+    console.log("Secret: " + process.env.ACCESS_TOKEN_SECRET);
+
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user_id) => {
         if (err) return res.sendStatus(403); // You have a token, but it's invalid so don't have access
+        console.log("User: " + user_id);
         console.log("Authenticated successfully!");
         req.user_id = user_id;
         next(); // Move on from middleware

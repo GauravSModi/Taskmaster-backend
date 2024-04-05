@@ -75,24 +75,37 @@ app.post('/signup', async (req, res) => {
 });
 
 
-app.post('/getLists', auth.authenticateToken, async (req, res) => {
-    console.log("/getLists");
+app.post('/getNotes', auth.authenticateToken, async (req, res) => {
+    console.log("/getNotes");
     console.log("user_id: ", req.user_id);
 
-    let [status, lists] = await todo.getLists(req.user_id);
+    let [status, notes] = await todo.getNotes(req.user_id);
 
     res
         .status(status)
         .json({ success: status, 
-                lists: lists });
+                notes: notes });
 });
 
-app.post('/getList', auth.authenticateToken, async (req, res) => {
-    console.log("/list");
+app.post('/getMessage', auth.authenticateToken, async (req, res) => {
+    console.log("/getMessage");
     const user_id = req.user_id;
-    const { list_id } = req.body;
+    const { note_id } = req.body; // get the note_id of the list
 
-    let [status, tasks] = await todo.getTasks(user_id, list_id);
+    let [status, note] = await todo.getMessage(user_id, note_id);
+    
+    res
+        .status(status)
+        .json({ success: status, 
+                note: note });
+});
+
+app.post('/getTasks', auth.authenticateToken, async (req, res) => {
+    console.log("/getTasks");
+    const user_id = req.user_id;
+    const { note_id } = req.body; // get the note_id of the list
+
+    let [status, tasks] = await todo.getTasks(user_id, note_id);
     
     res
         .status(status)
@@ -100,18 +113,34 @@ app.post('/getList', auth.authenticateToken, async (req, res) => {
                 tasks: tasks });
 });
 
-
-// TODO: Finish these functions
-
 app.post('/updateTitle', auth.authenticateToken, async (req, res) => {
     console.log('updateTitle');
     const user_id = req.user_id;
-    const {list_id, title} = req.body;
+    const {note_id, title} = req.body;
 
-    let [status] = await todo.updateTitle(user_id, list_id, title);
+    let [status] = await todo.updateTitle(user_id, note_id, title);
 
     res
         .status(status)
+        .json({
+            status: status });
+});
+
+
+
+// TODO: Finish these functions
+
+app.post('/createNote', auth.authenticateToken, async (req, res) => {
+    console.log('/createNote');
+    const user_id = req.user_id;
+    const { title, message } = req.body;
+
+    let [status, note_id] = await todo.createNote(user_id, title, message);
+
+    res
+        .status(status)
+        .json({ status: status,
+                note_id: note_id });
 });
 
 app.post('/createList', auth.authenticateToken, async (req, res) => {
@@ -124,7 +153,7 @@ app.post('/createList', auth.authenticateToken, async (req, res) => {
     res
         .status(status)
         .json({ success: status,
-                list_id: list_id });
+                note_id: note_id });
 });
 
 app.post('/updateList', auth.authenticateToken, async (req, res) => {
@@ -161,31 +190,3 @@ const PORT = 8009;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-
-
-
-
-
-
-
-/****** Auth using passport ******
-
-const passport = require('./passport-config'); // Adjust the path as needed
-app.use(express.urlencoded({ extended: false }));
-app.use(session({ secret: 'your-secret-key', resave: true, saveUninitialized: true }));
-app.use(passport.initialize());
-app.use(passport.session());
-
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/dashboard',
-    failureRedirect: '/login',
-    failureFlash: true,
-}));
-  
-app.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
-});
-
-**********************************/
