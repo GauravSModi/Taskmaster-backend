@@ -122,31 +122,23 @@ function createList(user_id, title, tasks) {
                 console.log('Error: ', err);
                 resolve([500, 'Database error']);
             } else {
-                // console.log('result: ', result);
                 note_id = result.insertId;
-
                 for (const task in tasks) {
-                    // console.log('task: ', tasks[task]);
                     if (note_id !== null && task !== null) {
                         const sql_query = "INSERT INTO Task (note_id, description, user_id) VALUES (?, ?, ?)";
-        
                         db.conn.query(sql_query, [note_id, tasks[task], user_id], async (err, result) => {
                             if (err) {
                                 console.log('Error: ', err);
                                 resolve([500, 'Database error']);
                             } else {
-                                console.log('result: ', result);
+                                // console.log('result: ', result);
                             }
                         });
                     }
                 }
-
                 resolve([200, note_id]);
             }
         });
-
-        console.log("note_id: ", note_id);
-
     });
 };
 

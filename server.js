@@ -148,7 +148,7 @@ app.post('/createList', auth.authenticateToken, async (req, res) => {
     const user_id = req.user_id;
     const { title, tasks } = req.body;
 
-    let [status] = await todo.createList(user_id, title, tasks);
+    let [status, note_id] = await todo.createList(user_id, title, tasks);
 
     res
         .status(status)
