@@ -92,12 +92,12 @@ app.post('/getMessage', auth.authenticateToken, async (req, res) => {
     const user_id = req.user_id;
     const { note_id } = req.body; // get the note_id of the list
 
-    let [status, note] = await todo.getMessage(user_id, note_id);
+    let [status, message] = await todo.getMessage(user_id, note_id);
     
     res
         .status(status)
         .json({ success: status, 
-                note: note });
+                message: message });
 });
 
 app.post('/getTasks', auth.authenticateToken, async (req, res) => {
@@ -126,10 +126,6 @@ app.post('/updateTitle', auth.authenticateToken, async (req, res) => {
             status: status });
 });
 
-
-
-// TODO: Finish these functions
-
 app.post('/createNote', auth.authenticateToken, async (req, res) => {
     console.log('/createNote');
     const user_id = req.user_id;
@@ -156,6 +152,8 @@ app.post('/createList', auth.authenticateToken, async (req, res) => {
                 note_id: note_id });
 });
 
+// TODO: Finish these functions
+
 app.post('/updateList', auth.authenticateToken, async (req, res) => {
     console.log("/list");
     
@@ -173,17 +171,24 @@ app.delete('/deleteTask', auth.authenticateToken, async (req, res) => {
     const user_id = req.user_id;
     // const { task_id } = req.body;
 
-    // let [status] = await todo.deleteTask(user_id, );
+    // let [status] = await todo.deleteTask(user_id, task_id);
 
     // res
     //     .status(status)
     //     .json({ success: status });
 })
 
+app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
+    const user_id = req.user_id;
+    const { note_id } = req.body;
+    console.log("/deleteNote: ", note_id);
 
+    let [status, msg] = await todo.deleteNote(user_id, note_id);
 
-
-
+    res
+        .status(status)
+        .json({message: msg});
+});
 
 
 const PORT = 8009;

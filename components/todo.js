@@ -13,8 +13,8 @@ function getNotes(user_id) {
                 resolve([500, 'Database Error']);
             } else {
                 if (result.length === 0) {
-                    console.log("No Notes found")
-                    resolve([200, 'No Notes Found']);
+                    console.log("No notes found")
+                    resolve([200, 'No notes Found']);
                 } else {
                     const notes = result.map(note => ({
                         note_id: note.note_id,
@@ -38,13 +38,12 @@ function getMessage(user_id, note_id) {
                 resolve([500, 'Database Error']);
             } else {
                 if (result.length === 0) {
-                    resolve([200, 'No Tasks Found']);
+                    resolve([200, 'No tasks Found']);
                 } else {
                     let note = {
                         message_id: result[0].message_id,
                         message: result[0].message_content
                     }
-                    console.log(result[0].message_content);
                     resolve([200, note]);
                 }
             }
@@ -168,6 +167,25 @@ function deleteTask(user_id, task_id) {
 
 };
 
+function deleteNote(user_id, note_id) {
+    return new Promise(resolve => {
+        const sql_query = 'DELETE FROM Note WHERE user_id = ? AND note_id = ?'
+
+        db.conn.query(sql_query, [user_id, note_id], async (err, result) => {
+            if (err) {
+                console.log('Error: ', err);
+                resolve([500, 'Database error']);
+            } else {
+                if (result.affectedRows === 1){
+                    resolve([200, 'Successfully deleted']);
+                } else {
+                    resolve([200, "Doesn't exist"]);
+                }
+            }
+        })
+    });
+};
+
 module.exports = {
     getNotes,
     getMessage,
@@ -177,4 +195,5 @@ module.exports = {
     updateTitle,
     updateList,
     deleteTask,
+    deleteNote,
 };
