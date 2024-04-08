@@ -169,13 +169,13 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
 app.delete('/deleteTask', auth.authenticateToken, async (req, res) => {
     console.log("/deleteTask");
     const user_id = req.user_id;
-    // const { task_id } = req.body;
+    const { task_id } = req.body;
 
-    // let [status] = await todo.deleteTask(user_id, task_id);
+    let [status] = await todo.deleteTask(user_id, task_id);
 
-    // res
-    //     .status(status)
-    //     .json({ success: status });
+    res
+        .status(status)
+        .json({ success: status });
 })
 
 app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {

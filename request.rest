@@ -40,7 +40,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3
 Content-Type: application/json
 
 {
-    "title": "Test List2",
+    "title": "Test List3",
     "tasks": ["Create a createList function", "Test the function", "???", "Profit"]
 }
 

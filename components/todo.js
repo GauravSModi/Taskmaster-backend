@@ -38,13 +38,9 @@ function getMessage(user_id, note_id) {
                 resolve([500, 'Database Error']);
             } else {
                 if (result.length === 0) {
-                    resolve([200, 'No tasks Found']);
+                    resolve([200, 'No message found']);
                 } else {
-                    let note = {
-                        message_id: result[0].message_id,
-                        message: result[0].message_content
-                    }
-                    resolve([200, note]);
+                    resolve([200, result[0].message_content]);
                 }
             }
         });
@@ -62,7 +58,7 @@ function getTasks(user_id, note_id) {
                 resolve([500, 'Database Error']);
             } else {
                 if (result.length === 0) {
-                    resolve([200, 'No Tasks Found']);
+                    resolve([200, 'No tasks found']);
                 } else {
                     const tasks = result.map(task => ({
                         task_id: task.task_id,
@@ -164,7 +160,22 @@ function updateList(user_id, ) {
 };
 
 function deleteTask(user_id, task_id) {
+    return new Promise(resolve => {
+        const sql_query = 'DELETE FROM Task WHERE user_id = ? AND task_id = ?'
 
+        db.conn.query(sql_query, [user_id, task_id], async (err, result) => {
+            if (err) {
+                console.log('Error: ', err);
+                resolve([500, 'Database error']);
+            } else {
+                if (result.affectedRows === 1){
+                    resolve([200, 'Successfully deleted']);
+                } else {
+                    resolve([200, "Doesn't exist"]);
+                }
+            }
+        })
+    });
 };
 
 function deleteNote(user_id, note_id) {
