@@ -77,7 +77,6 @@ app.post('/signup', async (req, res) => {
 
 app.post('/getNotes', auth.authenticateToken, async (req, res) => {
     console.log("/getNotes");
-    console.log("user_id: ", req.user_id);
 
     let [status, notes] = await todo.getNotes(req.user_id);
 
@@ -114,7 +113,7 @@ app.post('/getTasks', auth.authenticateToken, async (req, res) => {
 });
 
 app.post('/updateTitle', auth.authenticateToken, async (req, res) => {
-    console.log('updateTitle');
+    console.log('/updateTitle');
     const user_id = req.user_id;
     const {note_id, title} = req.body;
 
@@ -123,7 +122,22 @@ app.post('/updateTitle', auth.authenticateToken, async (req, res) => {
     res
         .status(status)
         .json({
-            status: status });
+            status: status 
+        });
+});
+
+app.post('/updateMessage', auth.authenticateToken, async (req, res) => {
+    console.log('/updateMessage');
+    const user_id = req.user_id;
+    const {note_id, message} = req.body;
+
+    let [status] = await todo.updateMessage(user_id, note_id, message);
+
+    res
+        .status(status)
+        .json({
+            status: status 
+        });
 });
 
 app.post('/createNote', auth.authenticateToken, async (req, res) => {
@@ -152,6 +166,32 @@ app.post('/createList', auth.authenticateToken, async (req, res) => {
                 note_id: note_id });
 });
 
+app.delete('/deleteTask', auth.authenticateToken, async (req, res) => {
+    console.log("/deleteTask");
+    const user_id = req.user_id;
+    const { task_id } = req.body;
+
+    let [status] = await todo.deleteTask(user_id, task_id);
+
+    res
+        .status(status)
+        .json({ success: status });
+})
+
+app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
+    console.log("/deleteNote: ", note_id);
+    const user_id = req.user_id;
+    const { note_id } = req.body;
+    
+    let [status, msg] = await todo.deleteNote(user_id, note_id);
+
+    res
+        .status(status)
+        .json({message: msg});
+});
+
+
+
 // TODO: Finish these functions
 
 app.post('/updateList', auth.authenticateToken, async (req, res) => {
@@ -166,29 +206,6 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
         .status(status)
 });
 
-app.delete('/deleteTask', auth.authenticateToken, async (req, res) => {
-    console.log("/deleteTask");
-    const user_id = req.user_id;
-    const { task_id } = req.body;
-
-    let [status] = await todo.deleteTask(user_id, task_id);
-
-    res
-        .status(status)
-        .json({ success: status });
-})
-
-app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
-    const user_id = req.user_id;
-    const { note_id } = req.body;
-    console.log("/deleteNote: ", note_id);
-
-    let [status, msg] = await todo.deleteNote(user_id, note_id);
-
-    res
-        .status(status)
-        .json({message: msg});
-});
 
 
 const PORT = 8009;
