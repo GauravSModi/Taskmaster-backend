@@ -179,10 +179,10 @@ app.delete('/deleteTask', auth.authenticateToken, async (req, res) => {
 })
 
 app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
-    console.log("/deleteNote: ", note_id);
+    console.log("/deleteNote: ");
     const user_id = req.user_id;
     const { note_id } = req.body;
-    
+
     let [status, msg] = await todo.deleteNote(user_id, note_id);
 
     res
