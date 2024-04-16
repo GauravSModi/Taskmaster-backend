@@ -23,6 +23,7 @@ app.use(express.json());
 // // }
 
 app.post('/login', async (req, res) => {
+    console.log('/login');
     const {username, password} = req.body;
 
     const result = await auth.login(username, password);
@@ -48,6 +49,7 @@ app.post('/login', async (req, res) => {
 // Https should be used for sensitive info. 
 // transportation from front to back
 app.post('/signup', async (req, res) => {
+    console.log('/signup');
     const {username, email, password} = req.body;
 
     let [status, message] = await auth.signup(username, email, password);
@@ -76,9 +78,11 @@ app.post('/signup', async (req, res) => {
 
 
 app.post('/getNotes', auth.authenticateToken, async (req, res) => {
-    console.log("/getNotes");
+    // console.log("/getNotes");
 
+    console.time('/getNotes');
     let [status, notes] = await todo.getNotes(req.user_id);
+    console.timeEnd('/getNotes');
 
     res
         .status(status)
@@ -87,12 +91,14 @@ app.post('/getNotes', auth.authenticateToken, async (req, res) => {
 });
 
 app.post('/getMessage', auth.authenticateToken, async (req, res) => {
-    console.log("/getMessage");
+    // console.log("/getMessage");
     const user_id = req.user_id;
     const { note_id } = req.body; // get the note_id of the list
 
+    console.time('/getMessage');
     let [status, message] = await todo.getMessage(user_id, note_id);
-    
+    console.timeEnd('/getMessage');
+
     res
         .status(status)
         .json({ success: status, 
@@ -100,12 +106,14 @@ app.post('/getMessage', auth.authenticateToken, async (req, res) => {
 });
 
 app.post('/getTasks', auth.authenticateToken, async (req, res) => {
-    console.log("/getTasks");
+    // console.log("/getTasks");
     const user_id = req.user_id;
     const { note_id } = req.body; // get the note_id of the list
 
+    console.time('/getTasks');
     let [status, tasks] = await todo.getTasks(user_id, note_id);
-    
+    console.timeEnd('/getTasks');
+
     res
         .status(status)
         .json({ success: status, 
@@ -113,11 +121,13 @@ app.post('/getTasks', auth.authenticateToken, async (req, res) => {
 });
 
 app.post('/updateTitle', auth.authenticateToken, async (req, res) => {
-    console.log('/updateTitle');
+    // console.log('/updateTitle');
     const user_id = req.user_id;
     const {note_id, title} = req.body;
 
+    console.time('/updateTitle');
     let [status] = await todo.updateTitle(user_id, note_id, title);
+    console.timeEnd('/updateTitle');
 
     res
         .status(status)
@@ -127,11 +137,13 @@ app.post('/updateTitle', auth.authenticateToken, async (req, res) => {
 });
 
 app.post('/updateMessage', auth.authenticateToken, async (req, res) => {
-    console.log('/updateMessage');
+    // console.log('/updateMessage');
     const user_id = req.user_id;
     const {note_id, message} = req.body;
 
+    console.time('/updateMessage')
     let [status] = await todo.updateMessage(user_id, note_id, message);
+    console.timeEnd('/updateMessage')
 
     res
         .status(status)
@@ -141,11 +153,13 @@ app.post('/updateMessage', auth.authenticateToken, async (req, res) => {
 });
 
 app.post('/createNote', auth.authenticateToken, async (req, res) => {
-    console.log('/createNote');
+    // console.log('/createNote');
     const user_id = req.user_id;
     const { title, message } = req.body;
 
+    console.time('/createNote')
     let [status, note_id] = await todo.createNote(user_id, title, message);
+    console.timeEnd('/createNote')
 
     res
         .status(status)
@@ -154,11 +168,13 @@ app.post('/createNote', auth.authenticateToken, async (req, res) => {
 });
 
 app.post('/createList', auth.authenticateToken, async (req, res) => {
-    console.log('/createList');
+    // console.log('/createList');
     const user_id = req.user_id;
     const { title, tasks } = req.body;
 
+    console.time('/createList');
     let [status, note_id] = await todo.createList(user_id, title, tasks);
+    console.timeEnd('/createList');
 
     res
         .status(status)
@@ -167,11 +183,13 @@ app.post('/createList', auth.authenticateToken, async (req, res) => {
 });
 
 app.delete('/deleteTask', auth.authenticateToken, async (req, res) => {
-    console.log("/deleteTask");
+    // console.log("/deleteTask");
     const user_id = req.user_id;
     const { task_id } = req.body;
 
+    console.time('/deleteTask');
     let [status] = await todo.deleteTask(user_id, task_id);
+    console.timeEnd('/deleteTask');
 
     res
         .status(status)
@@ -179,11 +197,13 @@ app.delete('/deleteTask', auth.authenticateToken, async (req, res) => {
 })
 
 app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
-    console.log("/deleteNote: ");
+    // console.log("/deleteNote: ");
     const user_id = req.user_id;
     const { note_id } = req.body;
 
+    console.time('/deleteNote');
     let [status, msg] = await todo.deleteNote(user_id, note_id);
+    console.timeEnd('/deleteNote');
 
     res
         .status(status)
@@ -195,12 +215,14 @@ app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
 // TODO: Finish these functions
 
 app.post('/updateList', auth.authenticateToken, async (req, res) => {
-    console.log("/list");
+    // console.log("/list");
     
     const user_id = req.user_id;
     const { task_id } = req.body;
 
+    console.time('/updateList');
     let [status] = await todo.updateList(user_id, task_id);
+    console.timeEnd('/updateList');
 
     res
         .status(status)
@@ -208,7 +230,7 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
 
 
 
-const PORT = 8009;
+const PORT = 8000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

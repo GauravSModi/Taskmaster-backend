@@ -17,37 +17,45 @@ function signup(username, email, password) {
         // TODO: Sanitize input here
 
         // Inputting values using the '?' placeholder also escapes the values (I think?)
-        const sql_query = 'INSERT INTO User (username, email, password) VALUES (?, ?, ?)';
+        const sql_query = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
         
         // Using .then() to handle the asynchronous result of hashPass
 
         hashPass(password)
         .then(hashedPassword => {
-            db.conn.query(sql_query, [db.conn.escape(username), db.conn.escape(email), hashedPassword], async (err, result) => {
+            db.conn.getConnection(function (err, connection) {
                 if (err) {
-
-                // Could not successfully create user
-                console.log("Error creating user: " + err.message + "     result: " + result);
-
-
-                // MySQL error code for duplicate entry (unique constraint violation)
-                if (err.code === 'ER_DUP_ENTRY') {
-                    let duplicateField;
-                    if (err.message.includes('username')) {
-                        duplicateField = 'username';
-                    } else if (err.message.includes('email')) {
-                        duplicateField = 'email';
+                    console.error('Database error: ', err);
+                    resolve([500, 'Database Error']);
+                }
+    
+                connection.query(sql_query, [db.conn.escape(username), db.conn.escape(email), hashedPassword], async (err, result) => {
+                    if (err) {
+    
+                    // Could not successfully create user
+                    console.log("Error creating user: " + err.message + "     result: " + result);
+    
+                    // MySQL error code for duplicate entry (unique constraint violation)
+                    if (err.code === 'ER_DUP_ENTRY') {
+                        let duplicateField;
+                        if (err.message.includes('username')) {
+                            duplicateField = 'username';
+                        } else if (err.message.includes('email')) {
+                            duplicateField = 'email';
+                        }
+                        resolve([409, `duplicate ${duplicateField}`]);
                     }
-                    resolve([409, `duplicate ${duplicateField}`]);
-                }
-                
-                } else {
-
-                    // Successfully created user
-                    resolve([200, 'user creation successful']);
-
-                }
+                    
+                    } else {
+                        // Successfully created user
+                        resolve([200, 'user creation successful']);
+    
+                    }
+                })
+    
+                if (connection) connection.release();
             })
+
         })
         .catch(e => {
             console.error('Promise rejected:', e);
@@ -63,10 +71,15 @@ function login(username, password) {
     return new Promise(resolve => {
         const sql_query = 'SELECT * FROM User WHERE username = ?';
 
-        db.conn.query(sql_query, [db.conn.escape(username)], async (err, result) => {
+
+        db.conn.getConnection(function (err, connection) {
             if (err) {
+                console.error('Database error: ', err);
                 resolve([500, 'Database Error']);
-            } else {
+            }
+
+            connection.query(sql_query, [db.conn.escape(username)], async (err, result) => {
+
                 if (result.length === 0) {
                     resolve([401, 'Login unsuccessful: Incorrect username']);
                 } else {
@@ -77,8 +90,10 @@ function login(username, password) {
                         resolve([401, 'Login unsuccessful: User found, incorrect password']);
                     }
                 }
-            }
-        });
+            })
+
+            if (connection) connection.release();
+        })
 
     }).catch(err => {
         console.error('Promise rejected: ', err);
@@ -86,6 +101,7 @@ function login(username, password) {
         throw err; // Re-throw the error to propagate it further
     });
 }
+
 
 // Use Bcrypt to de-salt and compare a stored password to a given password
 function validateUser(password, hash) {
@@ -121,21 +137,18 @@ function assignToken(user_id) {
 function authenticateToken(req, res, next) {
     // console.log("AuthenticateToken()");
     const authHeader = req.headers['authorization'];
-    // console.log("authHeader: " + authHeader);
     const token = authHeader && authHeader.split(' ')[1]; // This is essentially to make sure header != null
 
-    // console.log("Token: " + token);
     if (token  == null) {
         return res.sendStatus(401);
     }
 
-    console.log("Token: " + token);
-    console.log("Secret: " + process.env.ACCESS_TOKEN_SECRET);
+    // console.log("Token: " + token);
+    // console.log("Secret: " + process.env.ACCESS_TOKEN_SECRET);
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user_id) => {
         if (err) return res.sendStatus(403); // You have a token, but it's invalid so don't have access
-        console.log("User: " + user_id);
-        console.log("Authenticated successfully!");
+        console.log("User #" + user_id + " authenticated successfully!");
         req.user_id = user_id;
         next(); // Move on from middleware
     });
