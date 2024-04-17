@@ -69,8 +69,7 @@ function signup(username, email, password) {
 */
 function login(username, password) {
     return new Promise(resolve => {
-        const sql_query = 'SELECT * FROM User WHERE username = ?';
-
+        const sql_query = 'SELECT * FROM user WHERE username = ?';
 
         db.conn.getConnection(function (err, connection) {
             if (err) {
@@ -78,19 +77,26 @@ function login(username, password) {
                 resolve([500, 'Database Error']);
             }
 
-            connection.query(sql_query, [db.conn.escape(username)], async (err, result) => {
+            console.log(connection);
 
-                if (result.length === 0) {
-                    resolve([401, 'Login unsuccessful: Incorrect username']);
-                } else {
-                    console.log("User: " + result[0].user_id + " user: " + result[0].username);
-                    if (await validateUser(password, result[0].password)) {
-                        resolve([200, result[0].user_id]);
+            if (connection){
+                connection.query(sql_query, [db.conn.escape(username)], async (err, result) => {
+                    if (err) throw err;
+                    console.log(result);
+                    if (result.length === 0) {
+                        resolve([401, 'Login unsuccessful: Incorrect username']);
                     } else {
-                        resolve([401, 'Login unsuccessful: User found, incorrect password']);
+                        console.log("User: " + result[0].user_id + " user: " + result[0].username);
+                        if (await validateUser(password, result[0].password)) {
+                            resolve([200, result[0].user_id]);
+                        } else {
+                            resolve([401, 'Login unsuccessful: User found, incorrect password']);
+                        }
                     }
-                }
-            })
+                })
+            } else {
+                console.log("No connection")
+            }
 
             if (connection) connection.release();
         })
