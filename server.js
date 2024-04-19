@@ -22,26 +22,31 @@ app.use(express.json());
 // //     auth.validateUser(password, hash);    
 // // }
 
+app.get('/helloworld', (req, res) => {
+
+    res.setHeader('Content-Type', 'text/html');
+    
+    // Send a simple HTML response
+    res.send('<html><head><title>Simple Web Page</title></head><body><h1>Hello, World!</h1></body></html>');
+});
+
 app.post('/login', async (req, res) => {
     console.log('/login');
     const {username, password} = req.body;
 
-    const result = await auth.login(username, password);
-    const status = result[0];
+    const [status, result] = await auth.login(username, password);
 
     if (status == 200) {
-        const user_id = result[1];
-        const accessToken = auth.assignToken(user_id);
+        const accessToken = auth.assignToken(result);
         res
             .status(status)
             .json({ success: status,
                     token: accessToken });
     } else {
-        const message = result[1];
         res
             .status(status)
             .json({ success: status, 
-                    message: message });
+                    message: result });
     }
 });
 
@@ -52,28 +57,20 @@ app.post('/signup', async (req, res) => {
     console.log('/signup');
     const {username, email, password} = req.body;
 
-    let [status, message] = await auth.signup(username, email, password);
+    let [status, result] = await auth.signup(username, email, password);
 
-    res
-        .status(status)
-        .json({ success: status, 
-                message: message });
-
-// TODO: 
-    // if (status == 200) {
-    //     const user_id = result[1];
-    //     const accessToken = auth.assignToken(user_id);
-    //     res
-    //         .status(status)
-    //         .json({ success: status,
-    //                 token: accessToken });
-    // } else {
-    //     const message = result[1];
-    //     res
-    //         .status(status)
-    //         .json({ success: status, 
-    //                 message: message });
-    // }
+    if (status == 200) {
+        const accessToken = auth.assignToken(result);
+        res
+            .status(status)
+            .json({ success: status,
+                    token: accessToken });
+    } else {
+        res
+            .status(status)
+            .json({ success: status, 
+                    message: result });
+    }
 });
 
 
@@ -158,13 +155,13 @@ app.post('/createNote', auth.authenticateToken, async (req, res) => {
     const { title, message } = req.body;
 
     console.time('/createNote')
-    let [status, note_id] = await todo.createNote(user_id, title, message);
+    let [status, newNote] = await todo.createNote(user_id, title, message);
     console.timeEnd('/createNote')
 
     res
         .status(status)
         .json({ status: status,
-                note_id: note_id });
+                newNote: newNote });
 });
 
 app.post('/createList', auth.authenticateToken, async (req, res) => {

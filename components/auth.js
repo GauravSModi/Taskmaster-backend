@@ -14,13 +14,10 @@ function signup(username, email, password) {
 
     return new Promise (resolve => {
 
-        // TODO: Sanitize input here
-
-        // Inputting values using the '?' placeholder also escapes the values (I think?)
+        // Inputting values using the '?' placeholder also escapes the values
         const sql_query = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
         
         // Using .then() to handle the asynchronous result of hashPass
-
         hashPass(password)
         .then(hashedPassword => {
             db.conn.getConnection(function (err, connection) {
@@ -32,24 +29,24 @@ function signup(username, email, password) {
                 connection.query(sql_query, [db.conn.escape(username), db.conn.escape(email), hashedPassword], async (err, result) => {
                     if (err) {
     
-                    // Could not successfully create user
-                    console.log("Error creating user: " + err.message + "     result: " + result);
-    
-                    // MySQL error code for duplicate entry (unique constraint violation)
-                    if (err.code === 'ER_DUP_ENTRY') {
-                        let duplicateField;
-                        if (err.message.includes('username')) {
-                            duplicateField = 'username';
-                        } else if (err.message.includes('email')) {
-                            duplicateField = 'email';
+                        // Could not successfully create user
+                        console.log("Error creating user: " + err.message);
+        
+                        // MySQL error code for duplicate entry (unique constraint violation)
+                        if (err.code === 'ER_DUP_ENTRY') {
+                            let duplicateField;
+                            if (err.message.includes('username')) {
+                                duplicateField = 'username';
+                            } else if (err.message.includes('email')) {
+                                duplicateField = 'email';
+                            }
+                            resolve([409, `duplicate ${duplicateField}`]);
                         }
-                        resolve([409, `duplicate ${duplicateField}`]);
-                    }
                     
                     } else {
                         // Successfully created user
-                        resolve([200, 'user creation successful']);
-    
+                        const user_id = result.insertId;
+                        resolve([200, user_id]);
                     }
                 })
     
@@ -82,7 +79,7 @@ function login(username, password) {
             if (connection){
                 connection.query(sql_query, [db.conn.escape(username)], async (err, result) => {
                     if (err) throw err;
-                    console.log(result);
+                    // console.log(result);
                     if (result.length === 0) {
                         resolve([401, 'Login unsuccessful: Incorrect username']);
                     } else {
@@ -137,7 +134,7 @@ function hashPass(password) {
 }
 
 function assignToken(user_id) {
-    return jwt.sign(user_id, process.env.ACCESS_TOKEN_SECRET);
+    return jwt.sign({ user_id: user_id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h' });
 }
 
 function authenticateToken(req, res, next) {
@@ -149,13 +146,17 @@ function authenticateToken(req, res, next) {
         return res.sendStatus(401);
     }
 
-    // console.log("Token: " + token);
-    // console.log("Secret: " + process.env.ACCESS_TOKEN_SECRET);
-
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user_id) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
         if (err) return res.sendStatus(403); // You have a token, but it's invalid so don't have access
-        console.log("User #" + user_id + " authenticated successfully!");
-        req.user_id = user_id;
+
+        // Check if token has expired
+        if (decoded.exp <= Date.now() / 1000) {
+            console.log('Authentication failed: Token has expired.');
+            return res.status(401).json({ message: 'Token has expired' });
+        }
+        
+        console.log("User #" + decoded.user_id + " authenticated successfully!");
+        req.user_id = decoded.user_id;
         next(); // Move on from middleware
     });
 }

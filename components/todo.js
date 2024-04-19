@@ -118,7 +118,7 @@ function createNote(user_id, title, message) {
                     console.log('Error: ', err);
                     resolve([500, 'Database error']);
                 } else {
-                    // console.log('result: ', result);
+                    console.log('result: ', result);
                     note_id = result.insertId;
                     if (message == null) {
                         message = '';
@@ -132,7 +132,12 @@ function createNote(user_id, title, message) {
                                 console.log('Error: ', err);
                                 resolve([500, 'Database error']);
                             } else {
-                                resolve([200, note_id])
+                                resolve([200, {
+                                    note_id: note_id,
+                                    title: title,
+                                    is_fav: 0,
+                                    is_note: 0
+                                }])
                             }
                         });
                     }
