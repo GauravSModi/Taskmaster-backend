@@ -215,11 +215,12 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
     console.log("/updateList");
     
     const user_id = req.user_id;
-    const { note_id, list } = req.body;
-    console.log("List: " + list);
+    const { note_id, new_list, delete_list } = req.body;
+    console.log("New list: " + new_list);
+    console.log("Delete list: " + delete_list);
 
     console.time('/updateList');
-    let [status] = await todo.updateList(user_id, note_id, list);
+    let [status] = await todo.updateList(user_id, note_id, new_list, delete_list);
     console.timeEnd('/updateList');
 
     res
