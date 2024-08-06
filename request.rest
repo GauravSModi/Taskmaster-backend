@@ -20,13 +20,13 @@ Content-Type: application/json
 ###
 
 POST http://localhost:8009/getLists
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzEzNTIxNjc2LCJleHAiOjE3MTM1Mjg4NzZ9.IVAgWfWkzEUFzmW3W3ivookRs8BD9yTVX6rCgkyD8Fw
 Content-Type: application/json
 
 ###
 
 POST http://localhost:8009/getTasks
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzEzNTIxNjc2LCJleHAiOjE3MTM1Mjg4NzZ9.IVAgWfWkzEUFzmW3W3ivookRs8BD9yTVX6rCgkyD8Fw
 Content-Type: application/json
 
 {
@@ -35,19 +35,31 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8009/createList
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+POST http://localhost:8000/createList
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzIyOTM4Mjc0LCJleHAiOjE3MjI5NDU0NzR9.p_rYEbl9YrkiYRIJllHkvoc9dRmGWVAdEZXauStRZrU
 Content-Type: application/json
 
 {
-    "title": "Test List3",
+    "title": "Test List69",
     "tasks": ["Create a createList function", "Test the function", "???", "Profit"]
 }
 
 ###
 
+POST http://localhost:8000/updateList
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzIyOTM4Mjc0LCJleHAiOjE3MjI5NDU0NzR9.p_rYEbl9YrkiYRIJllHkvoc9dRmGWVAdEZXauStRZrU
+Content-Type: application/json
+
+{
+    "note_id": "Test List69",
+    "list": ["Create a createList function", "Test the function", "???", "Profit"]
+}
+
+
+###
+
 POST http://localhost:8009/updateTitle
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzEzNTIxNjc2LCJleHAiOjE3MTM1Mjg4NzZ9.IVAgWfWkzEUFzmW3W3ivookRs8BD9yTVX6rCgkyD8Fw
 Content-Type: application/json
 
 {
@@ -58,7 +70,7 @@ Content-Type: application/json
 ###
 
 POST http://localhost:8009/createNote
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzEzNTIxNjc2LCJleHAiOjE3MTM1Mjg4NzZ9.IVAgWfWkzEUFzmW3W3ivookRs8BD9yTVX6rCgkyD8Fw
 Content-Type: application/json
 
 {
@@ -69,7 +81,7 @@ Content-Type: application/json
 ###
 
 POST http://localhost:8009/getMessage
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzEzNTIxNjc2LCJleHAiOjE3MTM1Mjg4NzZ9.IVAgWfWkzEUFzmW3W3ivookRs8BD9yTVX6rCgkyD8Fw
 Content-Type: application/json
 
 {
@@ -79,7 +91,7 @@ Content-Type: application/json
 ###
 
 DELETE  http://localhost:8009/deleteNote
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.OTM.orA1g5EwhafGoYcY2rIG4AxhuxCLAEqd3GTDILA9Xp0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzEzNTIxNjc2LCJleHAiOjE3MTM1Mjg4NzZ9.IVAgWfWkzEUFzmW3W3ivookRs8BD9yTVX6rCgkyD8Fw
 Content-Type: application/json
 
 {
@@ -87,3 +99,5 @@ Content-Type: application/json
 }
 
 ###
+
+

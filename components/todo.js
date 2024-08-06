@@ -67,40 +67,6 @@ function getMessage(user_id, note_id) {
 };
 
 
-// Get all the tasks and their details associated with a list
-function getTasks(user_id, note_id) {
-    return new Promise(resolve => {
-        const sql_query = "SELECT * FROM task WHERE note_id = ? AND user_id = ?";
-        
-        db.conn.getConnection(function (err, connection) {
-            if (err) {
-                console.error('Database error: ', err);
-                resolve([500, 'Database Error']);
-            }
-
-            connection.query(sql_query, [note_id, user_id], async (err, result) => {
-                if (err) {
-                    resolve([500, 'Database Error']);
-                } else {
-                    if (result.length === 0) {
-                        resolve([200, 'No tasks found']);
-                    } else {
-                        const tasks = result.map(task => ({
-                            task_id: task.task_id,
-                            description: task.description,
-                            is_completed: task.is_completed
-                        }));
-                        resolve([200, tasks]);
-                    }
-                }
-            })
-            
-            if (connection) connection.release();
-        })
-
-    });
-};
-
 function createNote(user_id, title, message) {
     return new Promise(resolve => {
         const sql_query = "INSERT INTO note (user_id, title, is_note) VALUES (?, ?, 0)";
@@ -118,7 +84,7 @@ function createNote(user_id, title, message) {
                     console.log('Error: ', err);
                     resolve([500, 'Database error']);
                 } else {
-                    console.log('result: ', result);
+                    // console.log('result: ', result);
                     note_id = result.insertId;
                     if (message == null) {
                         message = '';
@@ -147,6 +113,81 @@ function createNote(user_id, title, message) {
             if (connection) connection.release();
         })
 
+    });
+};
+
+// TODO
+function updateList(user_id, note_id, list) {
+    return new Promise(resolve => {
+        const sql_query_get_tasks = 'SELECT * FROM task WHERE note_id = ? AND user_id = ?';
+        const sql_query_new_task = 'INSERT INTO task (note_id, description, is_completed, user_id) VALUES (?, ?, ?, ?)';
+        const sql_query_existing_task = 'UPDATE task SET description = ?, is_completed = ? WHERE note_id = ?, user_id = ?';
+        const sql_delete_existing_task = 'DELETE FROM task WHERE user_id = ? AND task_id = ?';
+
+        db.conn.getConnection(function (err, connection) {
+            if (err) {
+                console.error('Database error: ', err);
+                resolve([500, 'Database Error']);
+            }
+
+            connection.query(sql_query_get_tasks, [note_id, user_id], async (err, result) => {
+                if (err) {
+                    resolve([500, 'Database Error']);
+                } else {
+                    if (result.length === 0) {
+                        resolve([200, 'No tasks found']);
+                    } else {
+                        const tasks = result.map(task => ({
+                            task_id: task.task_id,
+                            description: task.description,
+                            is_completed: task.is_completed
+                        }));
+
+                        for (let i = 0; i < list.length; i++) {
+                            console.log("Existing tasks: ", tasks);
+                            console.log("Given list item:", list[i]);
+                            // If task does not yet exist
+                            if (list[i][0].toString().includes('newTask')){
+                                connection.query(sql_query_new_task, [note_id, list[i][1], list[i][2], user_id], async (err, result) => {
+                                    if (err) {
+                                        console.log('Error: ', err);
+                                        resolve([500, 'Database error']);
+                                    } else {
+                                        // console.log('result: ', result);
+                                    }
+                                });
+                            }
+                            // If task already exists, but is changed
+                            // else if (list[i][1] !==){
+
+                            //     connection.query(sql_query_existing_task, [list[i][1], list[i][2], note_id, user_id], async (err, result) => {
+                            //         if (err) {
+                            //             console.log('Error: ', err);
+                            //             resolve([500, 'Database error']);
+                            //         } else {
+                            //             // console.log('result: ', result);
+                            //         }
+                            //     });
+                            // }
+
+                            // // If task should be deleted
+                            // connection.query(sql_delete_existing_task, [note_id, list[i][1], list[i][2], user_id], async (err, result) => {
+                            //     if (err) {
+                            //         console.log('Error: ', err);
+                            //         resolve([500, 'Database error']);
+                            //     } else {
+                            //         // console.log('result: ', result);
+                            //     }
+                            // });
+                        }
+
+                    }
+                }
+            })
+            
+            if (connection) connection.release();
+        });
+        
     });
 };
 
@@ -250,10 +291,41 @@ function updateMessage(user_id, note_id, message) {
     });
 };
 
-// TODO
-function updateList(user_id, ) {
 
+// Get all the tasks and their details associated with a list
+function getTasks(user_id, note_id) {
+    return new Promise(resolve => {
+        const sql_query = 'SELECT * FROM task WHERE note_id = ? AND user_id = ?';
+        
+        db.conn.getConnection(function (err, connection) {
+            if (err) {
+                console.error('Database error: ', err);
+                resolve([500, 'Database Error']);
+            }
+
+            connection.query(sql_query, [note_id, user_id], async (err, result) => {
+                if (err) {
+                    resolve([500, 'Database Error']);
+                } else {
+                    if (result.length === 0) {
+                        resolve([200, 'No tasks found']);
+                    } else {
+                        const tasks = result.map(task => ({
+                            task_id: task.task_id,
+                            description: task.description,
+                            is_completed: task.is_completed
+                        }));
+                        resolve([200, tasks]);
+                    }
+                }
+            })
+            
+            if (connection) connection.release();
+        })
+
+    });
 };
+
 
 function deleteTask(user_id, task_id) {
     return new Promise(resolve => {

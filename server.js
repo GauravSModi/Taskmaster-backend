@@ -212,13 +212,14 @@ app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
 // TODO: Finish these functions
 
 app.post('/updateList', auth.authenticateToken, async (req, res) => {
-    // console.log("/list");
+    console.log("/updateList");
     
     const user_id = req.user_id;
-    const { task_id } = req.body;
+    const { note_id, list } = req.body;
+    console.log("List: " + list);
 
     console.time('/updateList');
-    let [status] = await todo.updateList(user_id, task_id);
+    let [status] = await todo.updateList(user_id, note_id, list);
     console.timeEnd('/updateList');
 
     res
@@ -227,7 +228,54 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
 
 
 
-const PORT = 8000;
+const PORT = 8001;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+// const express = require('express');
+// const app = express();
+// const port = 3000;
+
+// // In-memory data store (replace with a real database later)
+// let data = [];
+
+// app.use(express.json()); // To parse incoming JSON data
+
+// // Create (POST)
+// app.post('/api/items', (req, res) => {
+//     const newItem = req.body;
+//     data.push(newItem);
+//     res.status(201).json(newItem);
+// });
+
+// // Read (GET)
+// app.get('/api/items', (req, res) => {
+//     res.json(data);
+// });
+
+// // Update (PUT)
+// app.put('/api/items/:id', (req, res) => {
+//     const itemId = parseInt(req.params.id);
+//     const updatedItem = req.body;
+//     const index = data.findIndex(item => item.id === itemId);
+//     if (index !== -1) {
+//         data[index] = updatedItem;
+//         res.json(updatedItem);
+//     } else {
+//         res.status(404).send('Item not found');
+//     }
+// });
+
+// // Delete (DELETE)
+// app.delete('/api/items/:id', (req, res) => {
+//     const itemId = parseInt(req.params.id);
+//     data = data.filter(item => item.id !== itemId);
+//     res.status(204).send(); // No content on successful deletion
+// });
+
+// app.listen(port, () => {
+//     console.log(`Server listening at http://localhost:${port}`);
+// });
+                  

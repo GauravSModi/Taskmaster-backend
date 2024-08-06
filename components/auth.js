@@ -74,12 +74,9 @@ function login(username, password) {
                 resolve([500, 'Database Error']);
             }
 
-            console.log(connection);
-
             if (connection){
                 connection.query(sql_query, [db.conn.escape(username)], async (err, result) => {
                     if (err) throw err;
-                    // console.log(result);
                     if (result.length === 0) {
                         resolve([401, 'Login unsuccessful: Incorrect username']);
                     } else {
