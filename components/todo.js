@@ -216,10 +216,11 @@ function updateList(user_id, note_id, new_list, delete_list) {
     });
 };
 
-function createList(user_id, title, tasks) {
+function createList(user_id, title, list) {
     return new Promise(resolve => {
         const sql_query = "INSERT INTO note (user_id, title, is_note) VALUES (?, ?, 1)";
         let note_id = null;
+        console.log("List:", list);
 
         db.conn.getConnection(function (err, connection) {
             if (err) {
@@ -233,20 +234,24 @@ function createList(user_id, title, tasks) {
                     resolve([500, 'Database error']);
                 } else {
                     note_id = result.insertId;
-                    for (const task in tasks) {
+                    for (let task in list) {
+                        console.log('Task: ', list[task]);
                         if (note_id !== null && task !== null) {
-                            const sql_query = "INSERT INTO task (note_id, description, user_id) VALUES (?, ?, ?)";
-                            db.conn.query(sql_query, [note_id, tasks[task], user_id], async (err, result) => {
+                            const sql_query = "INSERT INTO task (note_id, description, is_completed, user_id) VALUES (?, ?, ?, ?)";
+                            db.conn.query(sql_query, [note_id, list[task][1], list[task][2], user_id], async (err, result) => {
                                 if (err) {
                                     console.log('Error: ', err);
                                     resolve([500, 'Database error']);
-                                } else {
-                                    // console.log('result: ', result);
                                 }
                             });
                         }
                     }
-                    resolve([200, note_id]);
+                    resolve([200, {
+                        note_id: note_id,
+                        title: title,
+                        is_fav: 0,
+                        is_note: 1
+                    }])
                 }
             });
             

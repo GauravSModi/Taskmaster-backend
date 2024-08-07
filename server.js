@@ -165,6 +165,21 @@ app.post('/createNote', auth.authenticateToken, async (req, res) => {
 });
 
 app.post('/createList', auth.authenticateToken, async (req, res) => {
+    // console.log('/createNote');
+    const user_id = req.user_id;
+    const { title, list } = req.body;
+
+    console.time('/createList')
+    let [status, newList] = await todo.createList(user_id, title, list);
+    console.timeEnd('/createList')
+
+    res
+        .status(status)
+        .json({ status: status,
+                newList: newList });
+});
+
+app.post('/createList', auth.authenticateToken, async (req, res) => {
     // console.log('/createList');
     const user_id = req.user_id;
     const { title, tasks } = req.body;
