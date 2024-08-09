@@ -1,4 +1,6 @@
 require('dotenv').config();
+const fs = require('fs');
+const https = require('https');
 const express = require('express');
 const cors = require('cors');
 const auth = require('./components/auth');
@@ -11,24 +13,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const privateKey = fs.readFileSync('certs/localhost-key.pem', 'utf8');
+const certificate = fs.readFileSync('certs/localhost-cert.pem', 'utf8');
 
-// Test Auth
-// // const password = "testpass@123";
-// // const hash = "$2b$10$2yfs.Z9vdZ7cZqKcVDpROO6sXR7bSoYD2kdKH7GDIAWnNaoK295py";
-
-// // /******* Auth *******/
-// // function authTesting (){
-// //     auth.hashPass(password);
-// //     auth.validateUser(password, hash);    
-// // }
-
-app.get('/helloworld', (req, res) => {
-
-    res.setHeader('Content-Type', 'text/html');
-    
-    // Send a simple HTML response
-    res.send('<html><head><title>Simple Web Page</title></head><body><h1>Hello, World!</h1></body></html>');
-});
+const credentials = { key: privateKey, cert: certificate };
 
 app.post('/login', async (req, res) => {
     console.log('/login');
@@ -223,9 +211,6 @@ app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
 });
 
 
-
-// TODO: Finish these functions
-
 app.post('/updateList', auth.authenticateToken, async (req, res) => {
     console.log("/updateList");
     
@@ -244,11 +229,17 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
 
 
 
-const PORT = 8001;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// const PORT = 8001;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on http://localhost:${PORT}`);
+// });
 
+const PORT = 8443;
+const httpsServer = https.createServer(credentials, app);
+
+httpsServer.listen(PORT, () => {
+    console.log(`HTTPS server is running on https://localhost:${PORT}`);
+});
 
 // const express = require('express');
 // const app = express();
