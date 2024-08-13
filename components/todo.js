@@ -6,7 +6,6 @@ function getNotes(user_id) {
     return new Promise(resolve => {
         const sql_query = "SELECT * FROM note WHERE user_id = ?";
 
-
         db.conn.getConnection(function (err, connection) {
             if (err) {
                 console.error('Database error: ', err);
@@ -117,12 +116,12 @@ function createNote(user_id, title, message) {
 };
 
 
-// Function to find a task by task_id
+// Helper function to find a task by task_id
 const findTaskById = (tasks, taskId) => {
     return tasks.find(task => task.task_id === taskId);
 };
 
-// TODO
+
 function updateList(user_id, note_id, new_list, delete_list) {
     return new Promise(resolve => {
         const sql_query_get_tasks = 'SELECT * FROM task WHERE note_id = ? AND user_id = ?';
@@ -150,8 +149,6 @@ function updateList(user_id, note_id, new_list, delete_list) {
                         }));
 
                         for (let i = 0; i < new_list.length; i++) {
-                            // console.log("Existing tasks: ", tasks);
-                            // console.log("New task:", list[i]);
 
                             const task_id = new_list[i][0];
                             const message = new_list[i][1];
@@ -165,7 +162,7 @@ function updateList(user_id, note_id, new_list, delete_list) {
                                         console.log('Error: ', err);
                                         resolve([500, 'Database error']);
                                     } else {
-                                        console.log('result: ', result);
+                                        // console.log('result: ', result);
                                     }
                                 });
                             } 
@@ -173,15 +170,11 @@ function updateList(user_id, note_id, new_list, delete_list) {
 
                             // If task already exists, but is changed (Task exists in both lists)
                             else if (existingTask){
-                                // console.log("Existing task:", existingTask);
                                 if (existingTask.description !== message || existingTask.is_completed !== checked) {
-                                    // TODO: This should send a sql query to update the existing task
                                     connection.query(sql_query_existing_task, [message, checked, existingTask.task_id, note_id, user_id], async (err, result) => {
                                         if (err) {
                                             console.log('Error: ', err);
                                             resolve([500, 'Database error']);
-                                        } else {
-                                            // console.log('result: ', result);
                                         }
                                     });
                                 }
@@ -191,15 +184,14 @@ function updateList(user_id, note_id, new_list, delete_list) {
                         // Iterate through the list of tasks to be deleted, and delete them.
                         for (let i = 0; i < delete_list.length; i++) {
                             const task_id = delete_list[i];
-                            console.log('Deleting task', task_id);
+                            // console.log('Deleting task', task_id);
                             connection.query(sql_delete_existing_task, [user_id, task_id], async (err, result) => {
                                 if (err) {
                                     console.log('Error: ', err);
                                     resolve([500, 'Database error']);
                                 } else {
-                                    console.log('result: ', result);
                                     if (result.affectedRows === 1){
-                                        console.log('Successfully deleted task', task_id);
+                                        // console.log('Successfully deleted task', task_id);
                                     } else {
                                         console.log('Error deleting task', task_id);
                                     }
@@ -220,7 +212,7 @@ function createList(user_id, title, list) {
     return new Promise(resolve => {
         const sql_query = "INSERT INTO note (user_id, title, is_note) VALUES (?, ?, 1)";
         let note_id = null;
-        console.log("List:", list);
+        // console.log("List:", list);
 
         db.conn.getConnection(function (err, connection) {
             if (err) {
@@ -235,7 +227,7 @@ function createList(user_id, title, list) {
                 } else {
                     note_id = result.insertId;
                     for (let task in list) {
-                        console.log('Task: ', list[task]);
+                        // console.log('Task: ', list[task]);
                         if (note_id !== null && task !== null) {
                             const sql_query = "INSERT INTO task (note_id, description, is_completed, user_id) VALUES (?, ?, ?, ?)";
                             db.conn.query(sql_query, [note_id, list[task][1], list[task][2], user_id], async (err, result) => {

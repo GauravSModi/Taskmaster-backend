@@ -1,4 +1,14 @@
-POST http://35.172.163.23:8000/login
+POST http://35.172.163.23:8443/login
+Content-Type: application/json
+
+{
+    "username": "gmodi",
+    "password": "brisingr"
+}
+
+###
+
+POST https://localhost:8443/login
 Content-Type: application/json
 
 {
@@ -19,8 +29,8 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8009/getLists
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzEzNTIxNjc2LCJleHAiOjE3MTM1Mjg4NzZ9.IVAgWfWkzEUFzmW3W3ivookRs8BD9yTVX6rCgkyD8Fw
+POST https://localhost:8443/getLists
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzIzMjQ2Njg4LCJleHAiOjE3MjMyNTM4ODh9.lErUHjp_0mL87tbZiZJxQI7IGSp0pRK4keJ9yeRT_HA
 Content-Type: application/json
 
 ###
