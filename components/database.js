@@ -1,12 +1,13 @@
 const mysql = require('mysql');
+require('dotenv').config();
 
 /////////////// Local Database Connection ///////////////
 
 const conn = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "Eldest1396",
-    database: "todolist",
+    host: process.env.LOCAL_HOST,
+    user: process.env.LOCAL_USER,
+    password: process.env.LOCAL_PASSWORD,
+    database: process.env.LOCAL_DATABASE,
     waitForConnections: true,
     connectionLimit: 10,
 });
@@ -17,10 +18,10 @@ const conn = mysql.createPool({
 //////////// AWS RDS Database Connection //////////////
 
 // const conn =  mysql.createPool({
-//     host: "db-taskmaster.c1iwammg4frg.us-east-1.rds.amazonaws.com",
-//     user: "gaurav",
-//     password: "Brisingr1396",
-//     database: "dbtaskmaster",
+//     host: process.env.AWS_HOST,
+//     user: process.env.AWS_USER,
+//     password: process.env.AWS_PASSWORD,
+//     database: process.env.AWS_DATABASE,
 //     connectionLimit: 10,
 //     waitForConnections: true,
 // })
