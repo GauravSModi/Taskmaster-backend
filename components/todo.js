@@ -1,5 +1,5 @@
 const db = require('./database');
-
+const ai = require('./ai');
 
 // Get all the notes associated with a user
 function getNotes(user_id) {
@@ -404,6 +404,22 @@ function deleteNote(user_id, note_id) {
         })
     });
 };
+
+
+function askAlex(query) {
+    return new Promise(resolve => {
+        // Write instructions to the model
+
+
+        // Configure AI settings
+
+
+        // Deal with response
+        let response = generateResponse(instructions, query, temp, max_tokens, top_p);
+    });
+}
+
+
 
 module.exports = {
     getNotes,

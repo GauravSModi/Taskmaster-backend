@@ -1,8 +1,8 @@
 require('dotenv').config();
 const fs = require('fs');
 const https = require('https');
-const express = require('express');
 const cors = require('cors');
+const express = require('express');
 const auth = require('./components/auth');
 const todo = require('./components/todo');
 
@@ -13,8 +13,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const privateKey = fs.readFileSync('certs/localhost-key.pem', 'utf8');
-const certificate = fs.readFileSync('certs/localhost-cert.pem', 'utf8');
+// const privateKey = fs.readFileSync('certs/localhost-key.pem', 'utf8');
+// const certificate = fs.readFileSync('certs/localhost.pem', 'utf8');
+const privateKey = fs.readFileSync('certs/10.0.0.157-key.pem', 'utf8');
+const certificate = fs.readFileSync('certs/10.0.0.157.pem', 'utf8');
 
 const credentials = { key: privateKey, cert: certificate };
 
@@ -234,10 +236,11 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
 //     console.log(`Server is running on http://localhost:${PORT}`);
 // });
 
-const PORT = 8443;
+const IP = '10.0.0.157';
+const PORT = 8442;
 const httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(PORT, () => {
+httpsServer.listen(PORT, IP, () => {
     console.log(`HTTPS server is running on https://localhost:${PORT}`);
 });
 

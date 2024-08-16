@@ -8,7 +8,17 @@ Content-Type: application/json
 
 ###
 
-POST https://localhost:8443/login
+POST https://localhost:8442/login
+Content-Type: application/json
+
+{
+    "username": "gmodi",
+    "password": "brisingr"
+}
+
+###
+
+POST https://10.0.0.157:8442/login
 Content-Type: application/json
 
 {
@@ -29,8 +39,14 @@ Content-Type: application/json
 
 ###
 
-POST https://localhost:8443/getLists
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzIzMjQ2Njg4LCJleHAiOjE3MjMyNTM4ODh9.lErUHjp_0mL87tbZiZJxQI7IGSp0pRK4keJ9yeRT_HA
+POST https://localhost:8443/getNotes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzIzNjIxMjg0LCJleHAiOjE3MjM2Mjg0ODR9.0vqEHH2GtT0TrO5wsNPvBHiTb9bBDguKynU9XyUvLfQ
+Content-Type: application/json
+
+###
+
+POST https://10.0.0.157:8442/getNotes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzIzNjYxMDYxLCJleHAiOjE3MjM2NjgyNjF9.XT0iyNPhJgFW3naKiGvLowk5SU3J5HbrjywzvOqTW8Q
 Content-Type: application/json
 
 ###
