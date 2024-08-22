@@ -237,10 +237,10 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
 // });
 
 const IP = '10.0.0.157';
-const port = 8442;
+const PORT = 8442;
 const httpsServer = https.createServer(credentials, app);
 
-httpsServer.listen(port, IP, () => {
+httpsServer.listen(PORT, IP, () => {
     console.log(`HTTPS server is running on https://localhost:${PORT}`);
 });
 
