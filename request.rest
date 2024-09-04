@@ -127,3 +127,22 @@ Content-Type: application/json
 ###
 
 
+POST https://10.0.0.157:8442/generateAiNote
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzI1NDgyNDc3LCJleHAiOjE3MjU0ODk2Nzd9.2PfrTJ9tjtn5Qr7X5NK1-TVhzqTb7E61Y_suU0rA1yM
+Content-Type: application/json
+
+{
+    "prompt": "Things to do on a weekend trip to Whistler"
+}
+
+###
+
+POST https://10.0.0.157:8442/generateAiNote
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzI1NDgyNDc3LCJleHAiOjE3MjU0ODk2Nzd9.2PfrTJ9tjtn5Qr7X5NK1-TVhzqTb7E61Y_suU0rA1yM
+Content-Type: application/json
+
+{
+    "prompt": "Generate a list of things to take to a 2 week trip to Europe"
+}
+
+###

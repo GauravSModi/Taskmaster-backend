@@ -5,6 +5,7 @@ const cors = require('cors');
 const express = require('express');
 const auth = require('./components/auth');
 const todo = require('./components/todo');
+const ai = require('./components/ai');
 
 // Create an express app.
 //      We are using cors to allow cross-origin requests. We are using app.use() to add the cors middleware to the Express application.
@@ -214,12 +215,9 @@ app.delete('/deleteNote', auth.authenticateToken, async (req, res) => {
 
 
 app.post('/updateList', auth.authenticateToken, async (req, res) => {
-    console.log("/updateList");
-    
+    // console.log("/updateList");
     const user_id = req.user_id;
     const { note_id, new_list, delete_list } = req.body;
-    console.log("New list: " + new_list);
-    console.log("Delete list: " + delete_list);
 
     console.time('/updateList');
     let [status] = await todo.updateList(user_id, note_id, new_list, delete_list);
@@ -229,6 +227,22 @@ app.post('/updateList', auth.authenticateToken, async (req, res) => {
         .status(status)
 });
 
+
+app.post('/generateAiNote', auth.authenticateToken, async (req, res) => {
+    console.log("/generateAiNote");
+    const user_id = req.user_id;
+    const { prompt } = req.body;
+
+    console.time('/generateAiNote')
+    let [status, title, points] = await ai.generateResponse(prompt);
+    console.timeEnd('/generateAiNote')
+
+    console.log('res: ',title, points);
+
+    res
+        .status(status)
+        .json({title: title, points: points});
+});
 
 
 // const port = 8001;
