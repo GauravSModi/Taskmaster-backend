@@ -19,7 +19,7 @@ const openai = new OpenAI({
 // const generateResponse = async (instructions, query, temp, max_tokens, top_p) => {
 const generateResponse = async (prompt) => {
     console.log('Prompt:', prompt);
-    const instructions = "Generate a list with the following prompt. Only return list (labelled with 'points'), with an appropriate title (labelled with 'title'). Don't divide list into sub-lists. Make it reasonably sized, max 15 items unless specified by user. Return in JSON format.";
+    const instructions = "Generate a list with the following prompt. Only return list (labelled with 'points'), with an appropriate title (labelled with 'title'). Don't divide list into sub-lists. Make it reasonably sized, max 15 items. Return in JSON format.";
     try {
         const completion = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
