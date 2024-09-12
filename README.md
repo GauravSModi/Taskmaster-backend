@@ -1,8 +1,9 @@
 # Taskmaster
 
 ## Description
-- RESTful API created using Node.js, Express, MySQL for full-stack productivity-enhancing web app.
-- Pairs with a React.js, Bootstrap frontend providing a responsive web app experience.
+- RESTful API created using Node.js, Express, MySQL for full-stack productivity-enhancing web app
+- Pairs with a React.js, Bootstrap frontend providing a responsive web app experience
+- Utilizes **OpenAI API** to generate customized lists tailored to user requests
 
 ## Components and Technologies:
 - [x] Frontend - React.js, Bootstrap, AWS Amplify
