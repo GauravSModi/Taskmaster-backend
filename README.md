@@ -1,5 +1,7 @@
 # Taskmaster Backend
 
+[Explore the Taskmaster Frontend](https://github.com/GauravSModi/Taskmaster "Taskmaster Frontend")
+
 ## 🚀 Overview
 
 The **Taskmaster Backend** powers a full-stack productivity web application designed to streamline task management. Built with Node.js, Express, and MySQL, this backend serves as the backbone for a dynamic frontend experience created with React.js and Bootstrap. It provides a secure and efficient RESTful API, handling everything from user authentication to AI-driven list generation.
