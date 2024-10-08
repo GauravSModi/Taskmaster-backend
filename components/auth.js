@@ -144,7 +144,7 @@ function authenticateToken(req, res, next) {
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-        if (err) return res.sendStatus(403); // You have a token, but it's invalid so don't have access
+        if (err) return res.sendStatus(401); // You have a token, but it's invalid so don't have access
 
         // Check if token has expired
         if (decoded.exp <= Date.now() / 1000) {
