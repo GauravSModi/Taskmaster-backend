@@ -30,4 +30,4 @@ Whether it's creating, updating, or organizing your notes and tasks, Taskmaster'
 
 ## 🌐 Integration
 
-The Taskmaster Backend integrates smoothly with the Taskmaster Frontend, offering a cohesive full-stack application. This backend handles critical processes like user authentication, task management, and AI-powered functionalities, ensuring a secure and responsive user experience.
+The Taskmaster Backend integrates smoothly with the Taskmaster Frontend, offering a cohesive full-stack application. This backend handles critical processes like **user authentication**, **task management**, and **AI-powered functionalities**, ensuring a secure and responsive user experience.
