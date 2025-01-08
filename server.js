@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
-const https = require('https');
+// const https = require('https');
 const cors = require('cors');
 const express = require('express');
 const auth = require('./components/auth');
@@ -16,10 +16,15 @@ app.use(express.json());
 
 // const privateKey = fs.readFileSync('certs/localhost-key.pem', 'utf8');
 // const certificate = fs.readFileSync('certs/localhost.pem', 'utf8');
-const privateKey = fs.readFileSync('certs/10.0.0.157-key.pem', 'utf8');
-const certificate = fs.readFileSync('certs/10.0.0.157.pem', 'utf8');
+// const privateKey = fs.readFileSync('certs/10.0.0.157-key.pem', 'utf8');
+// const certificate = fs.readFileSync('certs/10.0.0.157.pem', 'utf8');
 
-const credentials = { key: privateKey, cert: certificate };
+// const credentials = { key: privateKey, cert: certificate };
+
+
+app.get('/', (req, res) => {
+    res.send('Hello World! Taskmaster backend is running!');
+});
 
 app.post('/login', async (req, res) => {
     console.log('/login');
@@ -245,61 +250,15 @@ app.post('/generateAiNote', auth.authenticateToken, async (req, res) => {
 });
 
 
-// const port = 8001;
-// app.listen(port, () => {
-//     console.log(`Server is running on http://localhost:${PORT}`);
-// });
-
-const IP = '10.0.0.157';
-const PORT = 8442;
-const httpsServer = https.createServer(credentials, app);
-
-httpsServer.listen(PORT, IP, () => {
-    console.log(`HTTPS server is running on https://localhost:${PORT}`);
+const port = 8000;
+app.listen(port, () => {
+    console.log(`Taskmaster server is running on http://localhost:${port}`);
 });
 
-// const express = require('express');
-// const app = express();
-// const port = 3000;
+// const IP = '10.0.0.157';
+// const PORT = 8442;
+// const httpsServer = https.createServer(credentials, app);
 
-// // In-memory data store (replace with a real database later)
-// let data = [];
-
-// app.use(express.json()); // To parse incoming JSON data
-
-// // Create (POST)
-// app.post('/api/items', (req, res) => {
-//     const newItem = req.body;
-//     data.push(newItem);
-//     res.status(201).json(newItem);
+// httpsServer.listen(PORT, IP, () => {
+//     console.log(`HTTPS server is running on https://localhost:${PORT}`);
 // });
-
-// // Read (GET)
-// app.get('/api/items', (req, res) => {
-//     res.json(data);
-// });
-
-// // Update (PUT)
-// app.put('/api/items/:id', (req, res) => {
-//     const itemId = parseInt(req.params.id);
-//     const updatedItem = req.body;
-//     const index = data.findIndex(item => item.id === itemId);
-//     if (index !== -1) {
-//         data[index] = updatedItem;
-//         res.json(updatedItem);
-//     } else {
-//         res.status(404).send('Item not found');
-//     }
-// });
-
-// // Delete (DELETE)
-// app.delete('/api/items/:id', (req, res) => {
-//     const itemId = parseInt(req.params.id);
-//     data = data.filter(item => item.id !== itemId);
-//     res.status(204).send(); // No content on successful deletion
-// });
-
-// app.listen(port, () => {
-//     console.log(`Server listening at http://localhost:${port}`);
-// });
-                  
