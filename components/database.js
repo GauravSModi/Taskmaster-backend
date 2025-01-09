@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 require('dotenv').config();
 
 /////////////// Local Database Connection ///////////////
@@ -14,7 +14,6 @@ const conn = mysql.createPool({
 
 /////////////////////////////////////////////////////////
 
-
 //////////// AWS RDS Database Connection //////////////
 
 // const conn =  mysql.createPool({
@@ -27,13 +26,6 @@ const conn = mysql.createPool({
 // })
 
 ///////////////////////////////////////////////////////
-
-
-
-// conn.connect(function(err) {
-//     if (err) throw err;
-//     console.log("Connected to database!");
-// });
 
 conn.getConnection(function(err, connection) {
     if (err) throw err;
