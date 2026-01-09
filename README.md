@@ -16,7 +16,7 @@ Whether it's creating, updating, or organizing your notes and tasks, Taskmaster'
 
 - **Frontend**: React.js, Bootstrap, Vercel
 - **Database**: MySQL, AWS RDS
-- **Backend**: Node.js, Express.js, AWS EC2, OpenAI API
+- **Backend**: Node.js, Express.js, AWS EC2, OpenAI API, Jest
 
 ## ✨ Key Features
 
