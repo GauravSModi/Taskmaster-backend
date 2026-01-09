@@ -219,29 +219,25 @@ describe('AI Module', () => {
 // ============================================================================
 
 describe('AI Module - Integration with Mocked OpenAI', () => {
-  // Store original env
-  const originalEnv = process.env;
-
-  beforeEach(() => {
-    // Reset modules and mocks
-    jest.resetModules();
-    process.env = { ...originalEnv, OPENAI_API_KEY: 'test-key' };
-  });
-
-  afterEach(() => {
-    process.env = originalEnv;
-    jest.clearAllMocks();
-  });
-
   test('should require OPENAI_API_KEY environment variable', () => {
-    // Temporarily remove the API key
+    // Store original env
+    const originalEnv = process.env;
+
+    // Remove the API key
+    process.env = { ...originalEnv };
     delete process.env.OPENAI_API_KEY;
+
+    // Reset modules to clear cached ai.js and mock dotenv to prevent .env reload
+    jest.resetModules();
+    jest.doMock('dotenv', () => ({ config: jest.fn() }));
 
     // The module should throw when imported without the key
     expect(() => {
-      jest.resetModules();
       require('../../components/ai');
     }).toThrow('Missing required environment variables');
+
+    // Restore env
+    process.env = originalEnv;
   });
 });
 
